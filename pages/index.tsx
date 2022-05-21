@@ -10,7 +10,7 @@ const Home: NextPage = () => {
         {[1, 2, 2, 3, 1, 1, 1, 1, 1].map((_, i) => (
           <Link href="/video" key={i}>
             <a className="contents">
-              <VideoCard />
+              <VideoCard isRecommended={false} />
             </a>
           </Link>
         ))}
