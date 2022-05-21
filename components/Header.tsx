@@ -4,11 +4,15 @@ import MicIcon from "@mui/icons-material/Mic";
 import VideoCallOutlinedIcon from "@mui/icons-material/VideoCallOutlined";
 import AppsOutlinedIcon from "@mui/icons-material/AppsOutlined";
 import NotificationsNoneOutlinedIcon from "@mui/icons-material/NotificationsNoneOutlined";
-const Header = () => {
+const Header = ({ isOpen, setSideBarOpen }) => {
   return (
     <div className="w-full bg-slate-700 h-14 flex justify-between items-center py-4 px-6">
       <div className="flex justify-between items-center">
-        <MenuIcon sx={{ color: "white" }} />
+        <MenuIcon
+          sx={{ color: "white" }}
+          className="hover:cursor-pointer"
+          onClick={() => setSideBarOpen(!isOpen)}
+        />
         <h3 className="pl-5 text-2xl text-white">NextTube</h3>
       </div>
       <div className="flex items-center w-1/2">
