@@ -1,10 +1,26 @@
+import { useCallback, useState } from "react";
 import { Box } from "@mui/material";
 import Modal from "@mui/material/Modal";
 import CloseIcon from "@mui/icons-material/Close";
 import FileUploadIcon from "@mui/icons-material/FileUpload";
-import Dropzone from "react-dropzone";
+import { useDropzone } from "react-dropzone";
 
 const UploadVideoModal = ({ isModalOpen, setModalOpen }) => {
+  const [file, setFile] = useState("");
+  const onDrop = useCallback((acceptedFiles) => {
+    acceptedFiles.forEach((file) => {
+      const reader = new FileReader();
+      reader.onabort = () => console.log("file reading was aborted");
+      reader.onerror = () => console.log("file reading has failed");
+      reader.onload = () => {
+        const binaryStr = reader.result;
+        setFile(binaryStr);
+      };
+      reader.readAsDataURL(file);
+    });
+  }, []);
+  const { getRootProps, getInputProps } = useDropzone({ onDrop });
+
   return (
     <Modal open={isModalOpen} onClose={() => setModalOpen(false)}>
       <Box
@@ -19,21 +35,18 @@ const UploadVideoModal = ({ isModalOpen, setModalOpen }) => {
           />
         </div>
         <hr />
-        <Dropzone onDrop={(acceptedFiles) => console.log(acceptedFiles)}>
-          {({ getRootProps, getInputProps }) => (
-            <div {...getRootProps()}>
-              <input {...getInputProps()} />
-              <div className="flex flex-col items-center gap-4 p-6">
-                <div className="bg-slate-900 w-36 h-36 rounded-full flex items-center justify-center hover:cursor-pointer">
-                  <FileUploadIcon sx={{ fontSize: "65px", color: "#aaa" }} />
-                </div>
-                <span className="text-base text-white font-medium">
-                  Drag and drop video files to upload
-                </span>
-              </div>
+        <div {...getRootProps()}>
+          <input {...getInputProps()} />
+          <div className="flex flex-col items-center gap-4 p-6">
+            <div className="bg-slate-900 w-36 h-36 rounded-full flex items-center justify-center hover:cursor-pointer">
+              <FileUploadIcon sx={{ fontSize: "65px", color: "#aaa" }} />
             </div>
-          )}
-        </Dropzone>
+            <span className="text-base text-white font-medium">
+              Drag and drop video files to upload
+            </span>
+            <img src={file} alt="image" />
+          </div>
+        </div>
       </Box>
     </Modal>
   );
