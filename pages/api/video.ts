@@ -17,7 +17,7 @@ export default async function handler(
     await dbConnect();
     try {
       const videoUrl = await cloud.videoUploads(req.body.video);
-      const thumbnailUrl = await cloud.thumbnailUploads(req.body.video);
+      const thumbnailUrl = await cloud.thumbnailUploads(req.body.thumbnail);
       req.body.video = videoUrl.url;
       req.body.thumbnail = thumbnailUrl.url;
       const video = await VideoDao.addNew(req.body);
