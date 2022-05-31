@@ -2,7 +2,9 @@ import { useEffect, useState } from "react";
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
 import Meta from "../../../components/Meta";
+import ThumbUpIcon from "@mui/icons-material/ThumbUp";
 import ThumbUpOutlinedIcon from "@mui/icons-material/ThumbUpOutlined";
+import ThumbDownIcon from "@mui/icons-material/ThumbDown";
 import ThumbDownOutlinedIcon from "@mui/icons-material/ThumbDownOutlined";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import CircularProgress from "@mui/material/CircularProgress";
@@ -10,22 +12,32 @@ import VideoCard from "../../../components/VideoCard";
 import Link from "next/link";
 import daysjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
-const Video: NextPage = ({ video }) => {
+const Video: NextPage = ({ video, videos }) => {
   const router = useRouter();
   const { id } = router.query;
-  const [isLoading, setLoading] = useState(true);
-  const [videos, setVideos] = useState<any[]>([]);
+  // const [isLoading, setLoading] = useState(true);
+  // const [videos, setVideos] = useState<any[]>([]);
+  const [likeClicked, setLikeClicked] = useState(false);
+  const [dislikeClicked, setDislikeClicked] = useState(false);
+  const [likes, setLikes] = useState(0);
   daysjs.extend(relativeTime);
 
   useEffect(() => {
-    fetch("http://localhost:3000/api/videos")
-      .then((res) => res.json())
-      .then((fin) => {
-        setVideos(fin.payload);
-        fin.status === "success" && setLoading(false);
-      })
-      .catch((err) => console.error(err));
-  }, []);
+    setLikes(video.likes);
+  }, [video]);
+
+  const likeVideo = (increment) => {
+    setLikes(increment ? likes + 1 : likes - 1);
+    setLikeClicked(!likeClicked);
+    fetch(`http://localhost:3000/api/videos/likes/${id}`, {
+      method: "put",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        incrementLike: increment ? true : false,
+      }),
+    });
+  };
+
   return (
     <div className="bg-slate-900 h-full p-4">
       <Meta title={video.title} />
@@ -45,31 +57,47 @@ const Video: NextPage = ({ video }) => {
             <source src={video.video} type="video/mp4"></source>
           </video>
           <div className="flex flex-col mt-3 flex-1">
-            <h1 className="text-white text-xl">
-              {console.log("asdadsdasdasdsa", video)}
-              {video.title}
-            </h1>
+            <h1 className="text-white text-xl">{video.title}</h1>
             <div className="flex flex-row justify-between items-center mt-2">
               <div style={{ color: "#aaa" }} className=" flex flex-col">
                 <div className="flex flex-row items-center">
                   <span className="text-sm">
-                    4,018,785 views {daysjs(video.createdAt).fromNow()}
+                    {video.views} views {daysjs(video.createdAt).fromNow()}
                   </span>
                 </div>
               </div>
               <div className="flex flex-row items-center">
                 <div className="flex flex-row items-center">
-                  <ThumbUpOutlinedIcon
-                    className="hover:cursor-pointer"
-                    sx={{ color: "white" }}
-                  />
-                  <span className="text-white text-base ml-2">93K</span>
+                  {likeClicked ? (
+                    <ThumbUpIcon
+                      onClick={() => likeVideo(false)}
+                      className="hover:cursor-pointer"
+                      sx={{ color: "white" }}
+                    />
+                  ) : (
+                    <ThumbUpOutlinedIcon
+                      onClick={() => likeVideo(true)}
+                      className="hover:cursor-pointer"
+                      sx={{ color: "white" }}
+                    />
+                  )}
+
+                  <span className="text-white text-base ml-2">{likes}</span>
                 </div>
                 <div className="flex flex-row items-center ml-3">
-                  <ThumbDownOutlinedIcon
-                    className="hover:cursor-pointer"
-                    sx={{ color: "white" }}
-                  />
+                  {dislikeClicked ? (
+                    <ThumbDownIcon
+                      onClick={() => setDislikeClicked(!dislikeClicked)}
+                      className="hover:cursor-pointer"
+                      sx={{ color: "white" }}
+                    />
+                  ) : (
+                    <ThumbDownOutlinedIcon
+                      onClick={() => setDislikeClicked(!dislikeClicked)}
+                      className="hover:cursor-pointer"
+                      sx={{ color: "white" }}
+                    />
+                  )}
                   <span className="text-white text-base ml-2">DISLIKE</span>
                 </div>
               </div>
@@ -109,19 +137,15 @@ const Video: NextPage = ({ video }) => {
           </div>
         </div>
         <div className="w-4/12 flex flex-col gap-2 ">
-          {isLoading ? (
-            <CircularProgress />
-          ) : (
-            videos.map(
-              (video, i) =>
-                video._id !== id && (
-                  <Link href={`/video/${video._id}`} key={i}>
-                    <a className="contents">
-                      <VideoCard key={i} isRecommended={true} video={video} />
-                    </a>
-                  </Link>
-                )
-            )
+          {videos.map(
+            (video, i) =>
+              video._id !== id && (
+                <Link href={`/video/${video._id}`} key={i}>
+                  <a className="contents">
+                    <VideoCard key={i} isRecommended={true} video={video} />
+                  </a>
+                </Link>
+              )
           )}
         </div>
       </div>
@@ -130,11 +154,24 @@ const Video: NextPage = ({ video }) => {
 };
 
 export async function getServerSideProps(context) {
+  //get single video
   const id = context.params.id;
   const res = await fetch(`http://localhost:3000/api/videos/${id}`);
   const videoData = await res.json();
   const video = videoData.payload;
-  return { props: { video } };
+
+  // update number of views
+  await fetch(`http://localhost:3000/api/videos/views/${id}`, {
+    method: "put",
+    headers: { "Content-Type": "application/json" },
+  });
+
+  //get all videos
+  const videosRes = await fetch("http://localhost:3000/api/videos");
+  const videosData = await videosRes.json();
+  const videos = videosData.payload;
+
+  return { props: { video, videos } };
 }
 
 export default Video;

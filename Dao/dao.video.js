@@ -27,14 +27,65 @@ class VideoDao {
 
   getVideo(id) {
     return new Promise((resolve, reject) => {
-      videoModel.findOne(
-        (id,
+      videoModel.findById(id, (err, result) => {
+        if (err) {
+          reject(err);
+        }
+        resolve(result);
+      });
+    });
+  }
+
+  likeVideo(id, increment) {
+    return new Promise((resolve, reject) => {
+      videoModel.findByIdAndUpdate(
+        id,
+        {
+          $inc: { likes: increment ? 1 : -1 },
+        },
+        { new: true },
         (err, result) => {
           if (err) {
             reject(err);
           }
           resolve(result);
-        })
+        }
+      );
+    });
+  }
+
+  dislikeVideo(id) {
+    return new Promise((resolve, reject) => {
+      videoModel.findByIdAndUpdate(
+        id,
+        {
+          $inc: { dislikes: 1 },
+        },
+        { new: true },
+        (err, result) => {
+          if (err) {
+            reject(err);
+          }
+          resolve(result);
+        }
+      );
+    });
+  }
+
+  increaseViews(id) {
+    return new Promise((resolve, reject) => {
+      videoModel.findByIdAndUpdate(
+        id,
+        {
+          $inc: { views: 1 },
+        },
+        { new: true },
+        (err, result) => {
+          if (err) {
+            reject(err);
+          }
+          resolve(result);
+        }
       );
     });
   }

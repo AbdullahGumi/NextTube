@@ -7,7 +7,7 @@ const VideoCard = ({ isRecommended, video }) => {
 
   return (
     <div
-      className={`${isRecommended ? "w-full" : "w-1/4"} ${
+      className={`${isRecommended ? "w-full" : "w-1/5"} ${
         isRecommended ? "" : "h-1/3"
       }  flex ${!isRecommended && "flex-col"} hover:cursor-pointer gap-3`}
     >

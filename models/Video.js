@@ -9,8 +9,11 @@ const videoSchema = new Schema(
     // },
     title: { type: String, required: true },
     desc: { type: String },
-    video: { type: String },
+    video: { type: String, required: true },
     thumbnail: { type: String },
+    views: { type: Number, default: 0 },
+    likes: { type: Number, default: 0 },
+    dislikes: { type: Number, default: 0 },
   },
   { timestamps: true }
 );
