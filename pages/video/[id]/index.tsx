@@ -14,7 +14,7 @@ const Video: NextPage = ({ video }) => {
   const router = useRouter();
   const { id } = router.query;
   const [isLoading, setLoading] = useState(true);
-  const [videos, setVideos] = useState([]);
+  const [videos, setVideos] = useState<any[]>([]);
   daysjs.extend(relativeTime);
 
   useEffect(() => {
@@ -30,17 +30,21 @@ const Video: NextPage = ({ video }) => {
     <div className="bg-slate-900 h-full p-4">
       <Meta title={video.title} />
       <div className="flex flex-row gap-4">
-        <div className="w-4/6">
+        <div className="w-4/6 flex flex-col ">
           <video
             controls
-            muted
             width="100%"
-            height="100%"
+            style={{
+              background: `transparent url(${video.thumbnail}) no-repeat 00`,
+              backgroundSize: "cover",
+              width: "100%",
+              height: "500px",
+            }}
             poster={video.thumbnail}
           >
             <source src={video.video} type="video/mp4"></source>
           </video>
-          <div className="flex flex-col mt-3">
+          <div className="flex flex-col mt-3 flex-1">
             <h1 className="text-white text-xl">
               {console.log("asdadsdasdasdsa", video)}
               {video.title}
@@ -108,13 +112,16 @@ const Video: NextPage = ({ video }) => {
           {isLoading ? (
             <CircularProgress />
           ) : (
-            videos.map((video, i) => (
-              <Link href="/video" key={i}>
-                <a className="contents">
-                  <VideoCard key={i} isRecommended={true} video={video} />
-                </a>
-              </Link>
-            ))
+            videos.map(
+              (video, i) =>
+                video._id !== id && (
+                  <Link href={`/video/${video._id}`} key={i}>
+                    <a className="contents">
+                      <VideoCard key={i} isRecommended={true} video={video} />
+                    </a>
+                  </Link>
+                )
+            )
           )}
         </div>
       </div>

@@ -24,7 +24,7 @@ const UploadVideoModal = ({ isModalOpen, setModalOpen }) => {
 
   const upload = () => {
     setLoading(true);
-    fetch("http://localhost:3000/api/video", {
+    fetch("http://localhost:3000/api/videos", {
       method: "post",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
