@@ -1,6 +1,6 @@
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
-const VideoCard = ({ isRecommended }) => {
+const VideoCard = ({ isRecommended, video }) => {
   return (
     <div
       className={`${isRecommended ? "w-full" : "w-1/4"} ${
@@ -8,10 +8,7 @@ const VideoCard = ({ isRecommended }) => {
       }  flex ${!isRecommended && "flex-col"} hover:cursor-pointer gap-3`}
     >
       <div>
-        <img
-          src="https://i.ytimg.com/vi/BfsNfFoA0J0/hqdefault.jpg?sqp=-oaymwEcCOADEI4CSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLAKrm-sxjGPKqDktDdt_JxXtTN0XA"
-          alt="image"
-        />
+        <img src={video.thumbnail} alt="image" />
       </div>
       <div className="flex flex-row justify-start items-start gap-2">
         <img
@@ -28,7 +25,7 @@ const VideoCard = ({ isRecommended }) => {
             } font-medium text-white`}
             style={{ lineHeight: "1.2" }}
           >
-            The Recession That Will Change A Generation
+            {video.title}
           </span>
           <div style={{ color: "#aaa" }} className=" flex flex-col">
             <div className="flex flex-row items-center mt-1">

@@ -15,6 +15,7 @@
     "@mui/material": "^5.8.0",
     "bcrypt": "^5.0.1",
     "cloudinary": "^1.30.0",
+    "dayjs": "^1.11.2",
     "dotenv": "^16.0.1",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^6.3.4",
