@@ -1,12 +1,13 @@
 const mongoose = require("mongoose");
+const User = require("./User");
 const Schema = mongoose.Schema;
 
-const videoSchema = new Schema(
+const VideoSchema = new Schema(
   {
-    // user_id: {
-    //   type: mongoose.Schema.Types.ObjectId,
-    //   ref: "User",
-    // },
+    user: {
+      type: Schema.Types.String,
+      ref: User,
+    },
     title: { type: String, required: true },
     desc: { type: String },
     video: { type: String, required: true },
@@ -19,4 +20,4 @@ const videoSchema = new Schema(
 );
 
 mongoose.models = {};
-module.exports = mongoose.model("Video", videoSchema);
+module.exports = mongoose.model("video", VideoSchema);

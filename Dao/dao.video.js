@@ -1,14 +1,16 @@
-const videoModel = require("../models/Video");
+const VideoModel = require("../models/Video");
+const UserModel = require("../models/User");
 class VideoDao {
   constructor() {}
   addNew(obj) {
     return new Promise((resolve, reject) => {
-      let video = new videoModel(obj);
+      let video = new VideoModel(obj);
       video.save((err, savedVideo) => {
         if (err) {
           reject(err);
           console.log("error: ", err);
         }
+        // video.populate({ path: "user", select: "email", model: UserModel });
         resolve(savedVideo);
       });
     });
@@ -16,7 +18,7 @@ class VideoDao {
 
   getAll() {
     return new Promise((resolve, reject) => {
-      videoModel.find({}, (err, allVideos) => {
+      VideoModel.find({}, (err, allVideos) => {
         if (err) {
           reject(err);
         }
@@ -27,7 +29,7 @@ class VideoDao {
 
   getVideo(id) {
     return new Promise((resolve, reject) => {
-      videoModel.findById(id, (err, result) => {
+      VideoModel.findById(id, (err, result) => {
         if (err) {
           reject(err);
         }
@@ -38,7 +40,7 @@ class VideoDao {
 
   likeVideo(id, increment) {
     return new Promise((resolve, reject) => {
-      videoModel.findByIdAndUpdate(
+      VideoModel.findByIdAndUpdate(
         id,
         {
           $inc: { likes: increment ? 1 : -1 },
@@ -56,7 +58,7 @@ class VideoDao {
 
   dislikeVideo(id) {
     return new Promise((resolve, reject) => {
-      videoModel.findByIdAndUpdate(
+      VideoModel.findByIdAndUpdate(
         id,
         {
           $inc: { dislikes: 1 },
@@ -74,7 +76,7 @@ class VideoDao {
 
   increaseViews(id) {
     return new Promise((resolve, reject) => {
-      videoModel.findByIdAndUpdate(
+      VideoModel.findByIdAndUpdate(
         id,
         {
           $inc: { views: 1 },

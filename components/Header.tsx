@@ -1,13 +1,14 @@
+import { signIn, signOut, useSession } from "next-auth/react";
 import MenuIcon from "@mui/icons-material/Menu";
 import SearchIcon from "@mui/icons-material/Search";
 import MicIcon from "@mui/icons-material/Mic";
 import VideoCallOutlinedIcon from "@mui/icons-material/VideoCallOutlined";
-import AppsOutlinedIcon from "@mui/icons-material/AppsOutlined";
-import NotificationsNoneOutlinedIcon from "@mui/icons-material/NotificationsNoneOutlined";
+import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
 import { useState } from "react";
 import UploadVideoModal from "./UploadVideoModal";
 
 const Header = ({ isOpen, setSideBarOpen }) => {
+  const { data: session } = useSession();
   const [isModalOpen, setModalOpen] = useState(false);
   return (
     <>
@@ -26,24 +27,39 @@ const Header = ({ isOpen, setSideBarOpen }) => {
           <div className="p-2 bg-slate-200">
             <SearchIcon sx={{ color: "white" }} />
           </div>
-          <div className="rounded-full bg-black p-2 ml-2">
+          <div
+            className="rounded-full bg-black p-2 ml-2 hover:cursor-pointer"
+            onClick={signOut}
+          >
             <MicIcon sx={{ color: "white" }} />
           </div>
         </div>
-        <div className="flex items-center justify-between w-1/6">
-          <VideoCallOutlinedIcon
-            className="hover:cursor-pointer"
-            sx={{ color: "white" }}
-            onClick={() => setModalOpen(true)}
-          />
-          <AppsOutlinedIcon sx={{ color: "white" }} />
-          <NotificationsNoneOutlinedIcon sx={{ color: "white" }} />
-          <img
-            className="rounded-full p-2 w-12 h-12"
-            src="https://yt3.ggpht.com/yti/APfAmoGoY3ePenKwccHJOwl2DAHDj806V-hhhXts4sPsfA=s88-c-k-c0x00ffffff-no-rj-mo"
-            alt="profile"
-          />
-        </div>
+        {session ? (
+          <div className="flex items-center justify-end w-1/6 gap-2">
+            <VideoCallOutlinedIcon
+              className="hover:cursor-pointer"
+              sx={{ color: "white" }}
+              onClick={() => setModalOpen(true)}
+            />
+            <img
+              className="rounded-full p-2 w-12 h-12"
+              src={session.user?.image}
+              alt="profile"
+            />
+          </div>
+        ) : (
+          <div className="w-1/6">
+            <button
+              onClick={() =>
+                signIn("google", { callbackUrl: "http://localhost:3000/" })
+              }
+              className="flex flex-row border text-white border-white p-2 uppercase gap-3 rounded"
+            >
+              <AccountCircleOutlinedIcon />
+              sign in
+            </button>
+          </div>
+        )}
       </div>
     </>
   );
