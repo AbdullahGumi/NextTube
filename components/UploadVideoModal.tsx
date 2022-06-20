@@ -7,6 +7,7 @@ import CircularProgress from "@mui/material/CircularProgress";
 import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
 import Dropzone from "react-dropzone";
 import { useSession } from "next-auth/react";
+import toast from "react-hot-toast";
 
 const UploadVideoModal = ({ isModalOpen, setModalOpen }) => {
   const { data: session } = useSession();
@@ -39,8 +40,13 @@ const UploadVideoModal = ({ isModalOpen, setModalOpen }) => {
       }),
     })
       .then((res) => res.json())
-      .then((fin) => fin.status === "success" && setLoading(false))
-      .catch((err) => console.error(err));
+      .then((fin) => {
+        if (fin.status === "success") {
+          setLoading(false);
+          toast.success("Video Uploaded Successfully");
+        }
+      })
+      .catch((err) => toast.error(err));
   };
 
   return (
