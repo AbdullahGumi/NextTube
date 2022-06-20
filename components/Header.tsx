@@ -4,12 +4,25 @@ import SearchIcon from "@mui/icons-material/Search";
 import MicIcon from "@mui/icons-material/Mic";
 import VideoCallOutlinedIcon from "@mui/icons-material/VideoCallOutlined";
 import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import UploadVideoModal from "./UploadVideoModal";
 
 const Header = ({ isOpen, setSideBarOpen }) => {
   const { data: session } = useSession();
   const [isModalOpen, setModalOpen] = useState(false);
+
+  useEffect(() => {
+    if (session?.user?.name) {
+      fetch("http://localhost:3000/api/users", {
+        method: "post",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          username: session?.user?.name,
+        }),
+      });
+    }
+  }, [session?.user?.name]);
+
   return (
     <>
       <UploadVideoModal isModalOpen={isModalOpen} setModalOpen={setModalOpen} />

@@ -10,7 +10,6 @@ class VideoDao {
           reject(err);
           console.log("error: ", err);
         }
-        // video.populate({ path: "user", select: "email", model: UserModel });
         resolve(savedVideo);
       });
     });

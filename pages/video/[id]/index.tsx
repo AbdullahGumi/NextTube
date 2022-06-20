@@ -12,21 +12,24 @@ import VideoCard from "../../../components/VideoCard";
 import Link from "next/link";
 import daysjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
-const Video: NextPage = ({ video, videos }) => {
+const Video: NextPage = ({ video, videos, user }) => {
   const router = useRouter();
   const { id } = router.query;
   // const [isLoading, setLoading] = useState(true);
   // const [videos, setVideos] = useState<any[]>([]);
   const [likeClicked, setLikeClicked] = useState(false);
   const [dislikeClicked, setDislikeClicked] = useState(false);
+  const [subscribed, setSubscribed] = useState(false);
   const [likes, setLikes] = useState(0);
+  const [numOfSubscriptions, setNumOfSubscriptions] = useState(0);
   daysjs.extend(relativeTime);
 
   useEffect(() => {
     setLikes(video.likes);
-  }, [video]);
+    setNumOfSubscriptions(user.subscribers);
+  }, [user, video]);
 
-  const likeVideo = (increment) => {
+  const likeVideo = (increment: boolean) => {
     setLikes(increment ? likes + 1 : likes - 1);
     setLikeClicked(!likeClicked);
     fetch(`http://localhost:3000/api/videos/likes/${id}`, {
@@ -35,6 +38,21 @@ const Video: NextPage = ({ video, videos }) => {
       body: JSON.stringify({
         incrementLike: increment ? true : false,
       }),
+    });
+  };
+
+  const subscribe = (isSubscribed: boolean) => {
+    fetch(`http://localhost:3000/api/users/subscribe/${user._id}`, {
+      method: "put",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        incrementSub: isSubscribed,
+      }),
+    }).then(() => {
+      setNumOfSubscriptions(
+        isSubscribed ? numOfSubscriptions + 1 : numOfSubscriptions - 1
+      );
+      setSubscribed(!subscribed);
     });
   };
 
@@ -112,7 +130,7 @@ const Video: NextPage = ({ video, videos }) => {
               <div className="flex flex-col justify-between flex-1">
                 <div className=" flex flex-col">
                   <div className="flex flex-row items-center mt-1">
-                    <span className="text-sm text-white">Netflix</span>
+                    <span className="text-sm text-white">{video.user}</span>
                     <CheckCircleIcon
                       sx={{
                         width: "15px",
@@ -124,15 +142,28 @@ const Video: NextPage = ({ video, videos }) => {
                   </div>
                   <div className="flex flex-row items-center ">
                     <span style={{ color: "#aaa" }} className="text-sm">
-                      23.6M subscribers
+                      {numOfSubscriptions} subscribers
                     </span>
                   </div>
                 </div>
                 <span className="text-white mt-4 ">{video.desc}</span>
               </div>
-              <div className="hover:cursor-pointer bg-red-600 p-2 text-white font-semibold h-fit rounded-md">
-                SUBSCRIBE
-              </div>
+              {subscribed ? (
+                <button
+                  onClick={() => subscribe(false)}
+                  className={`hover:cursor-pointer hover:bg-slate-400 bg-slate-600 p-2 text-white font-semibold h-fit rounded-md`}
+                >
+                  SUBSCRIBED
+                </button>
+              ) : (
+                <button
+                  onClick={() => subscribe(true)}
+                  className={`hover:cursor-pointer hover:bg-red-500 bg-red-600
+                 p-2 text-white font-semibold h-fit rounded-md`}
+                >
+                  SUBSCRIBE
+                </button>
+              )}
             </div>
           </div>
         </div>
@@ -158,7 +189,7 @@ export async function getServerSideProps(context) {
   const id = context.params.id;
   const res = await fetch(`http://localhost:3000/api/videos/${id}`);
   const videoData = await res.json();
-  const video = videoData.payload;
+  const { video, user } = videoData.payload;
 
   // update number of views
   await fetch(`http://localhost:3000/api/videos/views/${id}`, {
@@ -171,7 +202,7 @@ export async function getServerSideProps(context) {
   const videosData = await videosRes.json();
   const videos = videosData.payload;
 
-  return { props: { video, videos } };
+  return { props: { video, videos, user } };
 }
 
 export default Video;

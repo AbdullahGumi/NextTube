@@ -6,8 +6,10 @@ import FileUploadIcon from "@mui/icons-material/FileUpload";
 import CircularProgress from "@mui/material/CircularProgress";
 import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
 import Dropzone from "react-dropzone";
+import { useSession } from "next-auth/react";
 
 const UploadVideoModal = ({ isModalOpen, setModalOpen }) => {
+  const { data: session } = useSession();
   const [isLoading, setLoading] = useState(false);
   const [video, setVideo] = useState("");
   const [thumbnail, setThumbnail] = useState("");
@@ -28,6 +30,7 @@ const UploadVideoModal = ({ isModalOpen, setModalOpen }) => {
       method: "post",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
+        user: session?.user?.name,
         title,
         desc,
         video,

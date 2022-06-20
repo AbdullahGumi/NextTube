@@ -39,14 +39,14 @@ const VideoCard = ({ isRecommended, video }) => {
           </span>
           <div style={{ color: "#aaa" }} className=" flex flex-col">
             <div className="flex flex-row items-center mt-1">
-              <span className="text-sm">Netflix</span>
+              <span className="text-sm">{video.user}</span>
               <CheckCircleIcon
                 sx={{ width: "15px", height: "15px", ml: "5px" }}
               />
             </div>
             <div className="flex flex-row items-center">
               <span className="text-sm">
-                4M Views • {daysjs(video.createdAt).fromNow()}
+                {video.views} Views • {daysjs(video.createdAt).fromNow()}
               </span>
             </div>
           </div>
