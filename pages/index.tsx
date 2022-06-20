@@ -5,11 +5,12 @@ import Link from "next/link";
 import Meta from "../components/Meta";
 import VideoCard from "../components/VideoCard";
 import LoadingVideoCard from "../components/LoadingVideoCard";
+import { NEXT_URL } from "../config/config";
 const Home: NextPage = () => {
   const [isLoading, setLoading] = useState(true);
   const [videos, setVideos] = useState([]);
   useEffect(() => {
-    fetch("http://localhost:3000/api/videos")
+    fetch(`${NEXT_URL}/api/videos`)
       .then((res) => res.json())
       .then((fin) => {
         setVideos(fin.payload);

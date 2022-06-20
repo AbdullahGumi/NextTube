@@ -6,6 +6,7 @@ import VideoCallOutlinedIcon from "@mui/icons-material/VideoCallOutlined";
 import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
 import { useEffect, useState } from "react";
 import UploadVideoModal from "./UploadVideoModal";
+import { NEXT_URL } from "../config/config";
 
 const Header = ({ isOpen, setSideBarOpen }) => {
   const { data: session } = useSession();
@@ -13,7 +14,7 @@ const Header = ({ isOpen, setSideBarOpen }) => {
 
   useEffect(() => {
     if (session?.user?.name) {
-      fetch("http://localhost:3000/api/users", {
+      fetch(`${NEXT_URL}/api/users`, {
         method: "post",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

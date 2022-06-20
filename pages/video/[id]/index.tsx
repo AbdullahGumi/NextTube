@@ -12,6 +12,7 @@ import VideoCard from "../../../components/VideoCard";
 import Link from "next/link";
 import daysjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
+import { NEXT_URL } from "../../../config/config";
 const Video: NextPage = ({ video, videos, user }) => {
   const router = useRouter();
   const { id } = router.query;
@@ -35,7 +36,7 @@ const Video: NextPage = ({ video, videos, user }) => {
   const likeVideo = (increment: boolean) => {
     setLikes(increment ? likes + 1 : likes - 1);
     setLikeClicked(!likeClicked);
-    fetch(`http://localhost:3000/api/videos/likes/${id}`, {
+    fetch(`${NEXT_URL}/api/videos/likes/${id}`, {
       method: "put",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -45,7 +46,7 @@ const Video: NextPage = ({ video, videos, user }) => {
   };
 
   const subscribe = (isSubscribed: boolean) => {
-    fetch(`http://localhost:3000/api/users/subscribe/${user._id}`, {
+    fetch(`${NEXT_URL}/api/users/subscribe/${user._id}`, {
       method: "put",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -191,18 +192,18 @@ const Video: NextPage = ({ video, videos, user }) => {
 export async function getServerSideProps(context) {
   //get single video
   const id = context.params.id;
-  const res = await fetch(`http://localhost:3000/api/videos/${id}`);
+  const res = await fetch(`${NEXT_URL}/api/videos/${id}`);
   const videoData = await res.json();
   const { video, user } = videoData.payload;
 
   // update number of views
-  await fetch(`http://localhost:3000/api/videos/views/${id}`, {
+  await fetch(`${NEXT_URL}/api/videos/views/${id}`, {
     method: "put",
     headers: { "Content-Type": "application/json" },
   });
 
   //get all videos
-  const videosRes = await fetch("http://localhost:3000/api/videos");
+  const videosRes = await fetch("${NEXT_URL}/api/videos");
   const videosData = await videosRes.json();
   const videos = videosData.payload;
 

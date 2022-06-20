@@ -8,6 +8,7 @@ import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
 import Dropzone from "react-dropzone";
 import { useSession } from "next-auth/react";
 import toast from "react-hot-toast";
+import { NEXT_URL } from "../config/config";
 
 const UploadVideoModal = ({ isModalOpen, setModalOpen }) => {
   const { data: session } = useSession();
@@ -27,7 +28,7 @@ const UploadVideoModal = ({ isModalOpen, setModalOpen }) => {
 
   const upload = () => {
     setLoading(true);
-    fetch("http://localhost:3000/api/videos", {
+    fetch(`${NEXT_URL}api/videos`, {
       method: "post",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -44,6 +45,7 @@ const UploadVideoModal = ({ isModalOpen, setModalOpen }) => {
         if (fin.status === "success") {
           setLoading(false);
           toast.success("Video Uploaded Successfully");
+          closeModal();
         }
       })
       .catch((err) => toast.error(err));
