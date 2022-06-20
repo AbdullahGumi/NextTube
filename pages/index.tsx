@@ -20,7 +20,7 @@ const Home: NextPage = () => {
   return (
     <div className="bg-slate-900 h-full p-4">
       <Meta title="NextTube" />
-      <div className="flex flex-wrap justify-evenly gap-4 ">
+      <div className="flex flex-wrap gap-12 ">
         {isLoading
           ? [...new Array(20)].map((_, i) => <LoadingVideoCard key={i} />)
           : videos.map((video) => (

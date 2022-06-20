@@ -31,6 +31,7 @@ const UploadVideoModal = ({ isModalOpen, setModalOpen }) => {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         user: session?.user?.name,
+        profilePic: session?.user?.image,
         title,
         desc,
         video,

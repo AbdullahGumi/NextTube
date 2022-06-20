@@ -2,7 +2,7 @@ import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import daysjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
-const VideoCard = ({ isRecommended, video }) => {
+const VideoCard = ({ isRecommended, video, user }) => {
   daysjs.extend(relativeTime);
 
   return (
@@ -25,7 +25,7 @@ const VideoCard = ({ isRecommended, video }) => {
           className={`rounded-full w-8 h-8 object-cover  ${
             isRecommended && "hidden"
           }`}
-          src="https://yt3.ggpht.com/ytc/AKedOLTZzZv60B1v76eOC7TsEYZD_TMH2-H5KeYxkfXGBQ=s68-c-k-c0x00ffffff-no-rj"
+          src={video.profilePic}
           alt="profile"
         />
         <div className="flex flex-col justify-between">

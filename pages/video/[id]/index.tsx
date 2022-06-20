@@ -15,18 +15,21 @@ import relativeTime from "dayjs/plugin/relativeTime";
 const Video: NextPage = ({ video, videos, user }) => {
   const router = useRouter();
   const { id } = router.query;
-  // const [isLoading, setLoading] = useState(true);
-  // const [videos, setVideos] = useState<any[]>([]);
   const [likeClicked, setLikeClicked] = useState(false);
   const [dislikeClicked, setDislikeClicked] = useState(false);
   const [subscribed, setSubscribed] = useState(false);
   const [likes, setLikes] = useState(0);
   const [numOfSubscriptions, setNumOfSubscriptions] = useState(0);
+  const [dis, setDisp] = useState(null);
+
+  const [numOfViews, setNumOfViews] = useState(0);
   daysjs.extend(relativeTime);
 
   useEffect(() => {
     setLikes(video.likes);
     setNumOfSubscriptions(user.subscribers);
+    setNumOfViews(video.views);
+    setDisp(video);
   }, [user, video]);
 
   const likeVideo = (increment: boolean) => {
@@ -66,7 +69,6 @@ const Video: NextPage = ({ video, videos, user }) => {
             width="100%"
             style={{
               background: `transparent url(${video.thumbnail}) no-repeat 00`,
-              backgroundSize: "cover",
               width: "100%",
               height: "500px",
             }}
@@ -80,7 +82,9 @@ const Video: NextPage = ({ video, videos, user }) => {
               <div style={{ color: "#aaa" }} className=" flex flex-col">
                 <div className="flex flex-row items-center">
                   <span className="text-sm">
-                    {video.views} views {daysjs(video.createdAt).fromNow()}
+                    {/* {number of views + 1 because the server updates the views
+                    on component mount but the ui remains with the old value} */}
+                    {numOfViews + 1} views {daysjs(video.createdAt).fromNow()}
                   </span>
                 </div>
               </div>
@@ -124,7 +128,7 @@ const Video: NextPage = ({ video, videos, user }) => {
             <div className="flex flex-row justify-between gap-5">
               <img
                 className="w-10 h-10 rounded-full object-cover"
-                src="https://yt3.ggpht.com/ytc/AKedOLTZzZv60B1v76eOC7TsEYZD_TMH2-H5KeYxkfXGBQ=s48-c-k-c0x00ffffff-no-rj"
+                src={user.profilePic}
                 alt="profile"
               />
               <div className="flex flex-col justify-between flex-1">
@@ -167,7 +171,7 @@ const Video: NextPage = ({ video, videos, user }) => {
             </div>
           </div>
         </div>
-        <div className="w-4/12 flex flex-col gap-2 ">
+        <div className="w-4/12 flex flex-col gap-4 ">
           {videos.map(
             (video, i) =>
               video._id !== id && (

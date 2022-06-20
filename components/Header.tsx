@@ -18,10 +18,11 @@ const Header = ({ isOpen, setSideBarOpen }) => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           username: session?.user?.name,
+          profilePic: session?.user?.image,
         }),
       });
     }
-  }, [session?.user?.name]);
+  }, [session?.user?.name, session?.user?.image]);
 
   return (
     <>

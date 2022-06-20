@@ -3,6 +3,7 @@ const Schema = mongoose.Schema;
 
 const UserSchema = new Schema({
   username: { type: String, required: true, index: { unique: true } },
+  profilePic: { type: String, required: true },
   subscribers: { type: Number, default: 0 },
   videos: [
     {

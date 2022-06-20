@@ -15,6 +15,7 @@ const VideoSchema = new Schema(
     views: { type: Number, default: 0 },
     likes: { type: Number, default: 0 },
     dislikes: { type: Number, default: 0 },
+    profilePic: { type: String, required: true },
   },
   { timestamps: true }
 );
