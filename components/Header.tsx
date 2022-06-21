@@ -4,11 +4,17 @@ import SearchIcon from "@mui/icons-material/Search";
 import MicIcon from "@mui/icons-material/Mic";
 import VideoCallOutlinedIcon from "@mui/icons-material/VideoCallOutlined";
 import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
-import { useEffect, useState } from "react";
+import { Dispatch, useEffect, useState } from "react";
 import UploadVideoModal from "./UploadVideoModal";
 import { NEXT_URL } from "../config/config";
 
-const Header = ({ isOpen, setSideBarOpen }) => {
+const Header = ({
+  isOpen,
+  setSideBarOpen,
+}: {
+  isOpen: boolean;
+  setSideBarOpen: Dispatch<boolean>;
+}) => {
   const { data: session } = useSession();
   const [isModalOpen, setModalOpen] = useState(false);
 
@@ -44,7 +50,7 @@ const Header = ({ isOpen, setSideBarOpen }) => {
           </div>
           <div
             className="rounded-full bg-black p-2 ml-2 hover:cursor-pointer"
-            onClick={signOut}
+            onClick={() => signOut()}
           >
             <MicIcon sx={{ color: "white" }} />
           </div>
@@ -58,7 +64,7 @@ const Header = ({ isOpen, setSideBarOpen }) => {
             />
             <img
               className="rounded-full p-2 w-12 h-12"
-              src={session.user?.image}
+              src={session.user?.image!}
               alt="profile"
             />
           </div>

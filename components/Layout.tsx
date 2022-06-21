@@ -1,7 +1,7 @@
 import { useState } from "react";
 import Header from "./Header";
 import LeftPane from "./LeftPane";
-export default function Layout({ children }) {
+export default function Layout({ children }: { children: any }) {
   const [isSideBarOpen, setSideBarOpen] = useState(true);
   return (
     <div className="min-h-screen flex flex-col">

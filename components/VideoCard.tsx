@@ -2,7 +2,25 @@ import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import daysjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
-const VideoCard = ({ isRecommended, video, user }) => {
+
+interface Iprops {
+  video: {
+    user: string;
+    title: string;
+    desc: string;
+    video: string;
+    thumbnail: string;
+    views: Number;
+    likes: Number;
+    dislikes: Number;
+    profilePic: string;
+    createdAt: string;
+    updatedAt: string;
+  };
+  isRecommended: boolean;
+}
+
+const VideoCard = ({ isRecommended, video }: Iprops) => {
   daysjs.extend(relativeTime);
 
   return (
@@ -45,8 +63,10 @@ const VideoCard = ({ isRecommended, video, user }) => {
               />
             </div>
             <div className="flex flex-row items-center">
+              <span className="text-sm">{video.views.toString()}</span>
+              <span className="text-sm mx-1"> Views • </span>
               <span className="text-sm">
-                {video.views} Views • {daysjs(video.createdAt).fromNow()}
+                {daysjs(video.createdAt).fromNow()}
               </span>
             </div>
           </div>

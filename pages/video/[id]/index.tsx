@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { Key, useEffect, useState } from "react";
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
 import Meta from "../../../components/Meta";
@@ -7,13 +7,36 @@ import ThumbUpOutlinedIcon from "@mui/icons-material/ThumbUpOutlined";
 import ThumbDownIcon from "@mui/icons-material/ThumbDown";
 import ThumbDownOutlinedIcon from "@mui/icons-material/ThumbDownOutlined";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
-import CircularProgress from "@mui/material/CircularProgress";
 import VideoCard from "../../../components/VideoCard";
 import Link from "next/link";
 import daysjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import { NEXT_URL } from "../../../config/config";
-const Video: NextPage = ({ video, videos, user }) => {
+
+interface IProps {
+  video: {
+    user: string;
+    title: string;
+    desc: string;
+    video: string;
+    thumbnail: string;
+    views: Number;
+    likes: Number;
+    dislikes: Number;
+    profilePic: string;
+    createdAt: string;
+    updatedAt: string;
+  };
+  user: {
+    username: string;
+    profilePic: string;
+    subscribers: Number;
+    videos: Array<string>;
+  };
+  videos: Array<video>;
+}
+
+const Video: NextPage = ({ video, videos, user }: IProps) => {
   const router = useRouter();
   const { id } = router.query;
   const [likeClicked, setLikeClicked] = useState(false);
@@ -21,16 +44,17 @@ const Video: NextPage = ({ video, videos, user }) => {
   const [subscribed, setSubscribed] = useState(false);
   const [likes, setLikes] = useState(0);
   const [numOfSubscriptions, setNumOfSubscriptions] = useState(0);
-  const [dis, setDisp] = useState(null);
 
   const [numOfViews, setNumOfViews] = useState(0);
   daysjs.extend(relativeTime);
 
   useEffect(() => {
+    console.log("user", user);
+    console.log("video", video);
+    console.log("videos", videos);
     setLikes(video.likes);
     setNumOfSubscriptions(user.subscribers);
     setNumOfViews(video.views);
-    setDisp(video);
   }, [user, video]);
 
   const likeVideo = (increment: boolean) => {
@@ -174,7 +198,10 @@ const Video: NextPage = ({ video, videos, user }) => {
         </div>
         <div className="w-4/12 flex flex-col gap-4 ">
           {videos.map(
-            (video, i) =>
+            (
+              video: { _id: string | string[] | undefined },
+              i: Key | null | undefined
+            ) =>
               video._id !== id && (
                 <Link href={`/video/${video._id}`} key={i}>
                   <a className="contents">
@@ -189,7 +216,7 @@ const Video: NextPage = ({ video, videos, user }) => {
   );
 };
 
-export async function getServerSideProps(context) {
+export async function getServerSideProps(context: any) {
   //get single video
   const id = context.params.id;
   const res = await fetch(`${NEXT_URL}/api/videos/${id}`);
@@ -203,7 +230,7 @@ export async function getServerSideProps(context) {
   });
 
   //get all videos
-  const videosRes = await fetch("${NEXT_URL}/api/videos");
+  const videosRes = await fetch(`${NEXT_URL}/api/videos`);
   const videosData = await videosRes.json();
   const videos = videosData.payload;
 

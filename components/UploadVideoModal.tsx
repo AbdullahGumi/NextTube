@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { Dispatch, useState } from "react";
 import { Box } from "@mui/material";
 import Modal from "@mui/material/Modal";
 import CloseIcon from "@mui/icons-material/Close";
@@ -10,11 +10,16 @@ import { useSession } from "next-auth/react";
 import toast from "react-hot-toast";
 import { NEXT_URL } from "../config/config";
 
-const UploadVideoModal = ({ isModalOpen, setModalOpen }) => {
+interface IProps {
+  isModalOpen: boolean;
+  setModalOpen: Dispatch<boolean>;
+}
+
+const UploadVideoModal = ({ isModalOpen, setModalOpen }: IProps) => {
   const { data: session } = useSession();
   const [isLoading, setLoading] = useState(false);
-  const [video, setVideo] = useState("");
-  const [thumbnail, setThumbnail] = useState("");
+  const [video, setVideo] = useState<any>("");
+  const [thumbnail, setThumbnail] = useState<any>("");
   const [title, setTitle] = useState("");
   const [desc, setDesc] = useState("");
 

@@ -24,7 +24,7 @@ const Home: NextPage = () => {
       <div className="flex flex-wrap gap-12 ">
         {isLoading
           ? [...new Array(20)].map((_, i) => <LoadingVideoCard key={i} />)
-          : videos.map((video) => (
+          : videos.map((video: any) => (
               <Link href={`/video/${video._id}`} key={video._id}>
                 <a className="contents">
                   <VideoCard isRecommended={false} video={video} />
