@@ -1,5 +1,4 @@
 import { Key, useEffect, useState } from "react";
-import type { NextPage } from "next";
 import { useRouter } from "next/router";
 import Meta from "../../../components/Meta";
 import ThumbUpIcon from "@mui/icons-material/ThumbUp";
@@ -28,37 +27,35 @@ interface IProps {
     updatedAt: string;
   };
   user: {
+    _id: string;
     username: string;
     profilePic: string;
     subscribers: Number;
     videos: Array<string>;
   };
-  videos: Array<video>;
+  videos: Array<any>;
 }
 
-const Video: NextPage = ({ video, videos, user }: IProps) => {
+const Video = ({ video, videos, user }: IProps) => {
   const router = useRouter();
   const { id } = router.query;
   const [likeClicked, setLikeClicked] = useState(false);
   const [dislikeClicked, setDislikeClicked] = useState(false);
   const [subscribed, setSubscribed] = useState(false);
-  const [likes, setLikes] = useState(0);
-  const [numOfSubscriptions, setNumOfSubscriptions] = useState(0);
+  const [likes, setLikes] = useState<Number>(0);
+  const [numOfSubscriptions, setNumOfSubscriptions] = useState<Number>(0);
 
-  const [numOfViews, setNumOfViews] = useState(0);
+  const [numOfViews, setNumOfViews] = useState<Number>(0);
   daysjs.extend(relativeTime);
 
   useEffect(() => {
-    console.log("user", user);
-    console.log("video", video);
-    console.log("videos", videos);
     setLikes(video.likes);
     setNumOfSubscriptions(user.subscribers);
     setNumOfViews(video.views);
   }, [user, video]);
 
   const likeVideo = (increment: boolean) => {
-    setLikes(increment ? likes + 1 : likes - 1);
+    setLikes(increment ? Number(likes) + 1 : Number(likes) - 1);
     setLikeClicked(!likeClicked);
     fetch(`${NEXT_URL}/api/videos/likes/${id}`, {
       method: "put",
@@ -78,7 +75,9 @@ const Video: NextPage = ({ video, videos, user }: IProps) => {
       }),
     }).then(() => {
       setNumOfSubscriptions(
-        isSubscribed ? numOfSubscriptions + 1 : numOfSubscriptions - 1
+        isSubscribed
+          ? Number(numOfSubscriptions) + 1
+          : Number(numOfSubscriptions) - 1
       );
       setSubscribed(!subscribed);
     });
@@ -109,7 +108,8 @@ const Video: NextPage = ({ video, videos, user }: IProps) => {
                   <span className="text-sm">
                     {/* {number of views + 1 because the server updates the views
                     on component mount but the ui remains with the old value} */}
-                    {numOfViews + 1} views {daysjs(video.createdAt).fromNow()}
+                    {Number(numOfViews) + 1} views{" "}
+                    {daysjs(video.createdAt).fromNow()}
                   </span>
                 </div>
               </div>
@@ -129,7 +129,9 @@ const Video: NextPage = ({ video, videos, user }: IProps) => {
                     />
                   )}
 
-                  <span className="text-white text-base ml-2">{likes}</span>
+                  <span className="text-white text-base ml-2">
+                    {Number(likes)}
+                  </span>
                 </div>
                 <div className="flex flex-row items-center ml-3">
                   {dislikeClicked ? (
@@ -171,7 +173,10 @@ const Video: NextPage = ({ video, videos, user }: IProps) => {
                   </div>
                   <div className="flex flex-row items-center ">
                     <span style={{ color: "#aaa" }} className="text-sm">
-                      {numOfSubscriptions} subscribers
+                      {Number(numOfSubscriptions)}
+                    </span>
+                    <span style={{ color: "#aaa" }} className="text-sm mx-1">
+                      subscribers
                     </span>
                   </div>
                 </div>
@@ -198,10 +203,7 @@ const Video: NextPage = ({ video, videos, user }: IProps) => {
         </div>
         <div className="w-4/12 flex flex-col gap-4 ">
           {videos.map(
-            (
-              video: { _id: string | string[] | undefined },
-              i: Key | null | undefined
-            ) =>
+            (video: any, i: Key | null | undefined) =>
               video._id !== id && (
                 <Link href={`/video/${video._id}`} key={i}>
                   <a className="contents">

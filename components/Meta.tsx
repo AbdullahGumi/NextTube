@@ -1,7 +1,7 @@
 import Head from "next/head";
 import React from "react";
 
-const Meta = ({ title }) => {
+const Meta = ({ title }: any) => {
   return (
     <Head>
       <title>{title}</title>

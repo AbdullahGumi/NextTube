@@ -5,6 +5,7 @@ import ExploreOutlinedIcon from "@mui/icons-material/ExploreOutlined";
 import SubscriptionsOutlinedIcon from "@mui/icons-material/SubscriptionsOutlined";
 import VideoLibraryOutlinedIcon from "@mui/icons-material/VideoLibraryOutlined";
 import { FC } from "react";
+
 const ListItem: FC<{ icon: any; text: any; href: any }> = ({
   icon,
   text,
@@ -27,7 +28,7 @@ const ListItem: FC<{ icon: any; text: any; href: any }> = ({
   );
 };
 
-const LeftPane = ({ isOpen }) => {
+const LeftPane = ({ isOpen }: { isOpen: boolean }) => {
   const menuItems = [
     {
       href: "/",
@@ -53,7 +54,7 @@ const LeftPane = ({ isOpen }) => {
   ];
 
   const renderMenuItems = () => {
-    return menuItems.map(({ href, title, icon }, i) => (
+    return menuItems.map(({ href, title, icon }: any, i) => (
       <ListItem key={i} href={href} icon={icon} text={title} />
     ));
   };
