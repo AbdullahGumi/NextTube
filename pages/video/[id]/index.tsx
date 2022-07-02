@@ -180,7 +180,9 @@ const Video = ({ video, videos, user }: IProps) => {
                     </span>
                   </div>
                 </div>
-                <span className="text-white mt-4 ">{video.desc}</span>
+                <span className="text-white mt-4 hidden sm:block ">
+                  {video.desc}
+                </span>
               </div>
               {subscribed ? (
                 <button
@@ -199,6 +201,7 @@ const Video = ({ video, videos, user }: IProps) => {
                 </button>
               )}
             </div>
+            <span className="text-white mt-4 sm:hidden  ">{video.desc}</span>
           </div>
         </div>
         <div className="w-full md:w-4/12 flex flex-col gap-4 ">
