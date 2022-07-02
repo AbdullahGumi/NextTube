@@ -1,6 +1,6 @@
 const LoadingVideoCard = () => {
   return (
-    <div className={`w-1/5 h-1/3 flex flex-col gap-3`}>
+    <div className={` flex flex-col gap-3`}>
       <div
         className="bg-gray-400"
         style={{
