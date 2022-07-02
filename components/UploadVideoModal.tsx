@@ -33,7 +33,7 @@ const UploadVideoModal = ({ isModalOpen, setModalOpen }: IProps) => {
 
   const upload = () => {
     setLoading(true);
-    fetch(`${NEXT_URL}api/videos`, {
+    fetch(`${NEXT_URL}/api/videos`, {
       method: "post",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
