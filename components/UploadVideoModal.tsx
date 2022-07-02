@@ -60,7 +60,7 @@ const UploadVideoModal = ({ isModalOpen, setModalOpen }: IProps) => {
     <Modal open={isModalOpen} onClose={closeModal}>
       <Box
         sx={{ transform: "translate(-50%, -50%)" }}
-        className="outline-none rounded-md flex flex-col gap-4 bg-slate-800 w-2/5 top-1/2 left-1/2 absolute "
+        className="outline-none rounded-md flex flex-col gap-4 bg-slate-800 w-[80%] sm:w-2/5 top-1/2 left-1/2 absolute "
       >
         <div className="flex flex-row justify-between pt-6 px-6 items-center">
           <h2 className="font-medium text-xl text-white">
@@ -135,16 +135,16 @@ const UploadVideoModal = ({ isModalOpen, setModalOpen }: IProps) => {
               }}
             >
               {({ getRootProps, getInputProps }) => (
-                <div {...getRootProps()}>
+                <div className="md:w-2/5 mb-2 " {...getRootProps()}>
                   <input {...getInputProps()} />
                   {thumbnail ? (
                     <img
                       src={thumbnail}
                       alt="thumbnail"
-                      className="w-2/5 h-20 object-cover"
+                      className="w-full h-20 object-cover"
                     />
                   ) : (
-                    <div className="flex flex-col items-center justify-center hover:cursor-pointer border-dashed border rounded-sm p-4 w-2/5 h-20">
+                    <div className="flex flex-col items-center justify-center hover:cursor-pointer border-dashed border rounded-sm p-4 w-full h-20">
                       <AddPhotoAlternateIcon className="text-white" />
                       <span className="text-white text-sm">
                         Upload thumbnail
