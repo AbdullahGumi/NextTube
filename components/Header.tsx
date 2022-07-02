@@ -1,7 +1,6 @@
 import { signIn, signOut, useSession } from "next-auth/react";
 import MenuIcon from "@mui/icons-material/Menu";
 import SearchIcon from "@mui/icons-material/Search";
-import MicIcon from "@mui/icons-material/Mic";
 import VideoCallOutlinedIcon from "@mui/icons-material/VideoCallOutlined";
 import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
 import { Dispatch, useEffect, useState } from "react";
@@ -48,12 +47,6 @@ const Header = ({
           <div className="p-2 bg-slate-200">
             <SearchIcon sx={{ color: "white" }} />
           </div>
-          <div
-            className="rounded-full bg-black p-2 ml-2 hover:cursor-pointer"
-            onClick={() => signOut()}
-          >
-            <MicIcon sx={{ color: "white" }} />
-          </div>
         </div>
         {session ? (
           <div className="flex items-center justify-end w-1/6 gap-2">
@@ -63,9 +56,10 @@ const Header = ({
               onClick={() => setModalOpen(true)}
             />
             <img
-              className="rounded-full p-2 w-12 h-12"
+              className="rounded-full p-2 w-12 h-12 hover:cursor-pointer"
               src={session.user?.image!}
               alt="profile"
+              onClick={() => signOut()}
             />
           </div>
         ) : (
