@@ -25,20 +25,20 @@ const VideoCard = ({ isRecommended, video }: Iprops) => {
 
   return (
     <div
-      className={`${isRecommended ? "w-full" : "w-1/5"} ${
-        isRecommended ? "" : "h-1/3"
-      }  flex ${!isRecommended && "flex-col"} hover:cursor-pointer gap-3`}
+      className={`flex ${
+        !isRecommended && "flex-col"
+      } hover:cursor-pointer gap-3`}
     >
       <img
         style={{
           width: isRecommended ? "168px" : "250px",
           height: isRecommended ? "94px" : "142px",
         }}
-        className="object-cover"
+        className="object-cover rounded-md"
         src={video.thumbnail}
         alt="image"
       />
-      <div className="flex flex-row justify-start items-start gap-2">
+      <div className="flex flex-row justify-between items-start gap-2">
         <img
           className={`rounded-full w-8 h-8 object-cover  ${
             isRecommended && "hidden"

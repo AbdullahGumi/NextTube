@@ -86,8 +86,8 @@ const Video = ({ video, videos, user }: IProps) => {
   return (
     <div className="bg-slate-900 h-full p-4">
       <Meta title={video.title} />
-      <div className="flex flex-row gap-4">
-        <div className="w-4/6 flex flex-col ">
+      <div className="flex flex-col md:flex-row gap-4">
+        <div className="w-full md:w-4/6 flex flex-col ">
           <video
             controls
             width="100%"
@@ -201,7 +201,7 @@ const Video = ({ video, videos, user }: IProps) => {
             </div>
           </div>
         </div>
-        <div className="w-4/12 flex flex-col gap-4 ">
+        <div className="w-full md:w-4/12 flex flex-col gap-4 ">
           {videos.map(
             (video: any, i: Key | null | undefined) =>
               video._id !== id && (

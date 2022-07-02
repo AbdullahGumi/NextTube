@@ -3,9 +3,10 @@ import MenuIcon from "@mui/icons-material/Menu";
 import SearchIcon from "@mui/icons-material/Search";
 import VideoCallOutlinedIcon from "@mui/icons-material/VideoCallOutlined";
 import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
-import { Dispatch, useEffect, useState } from "react";
+import { Dispatch, useContext, useEffect, useState } from "react";
 import UploadVideoModal from "./UploadVideoModal";
 import { NEXT_URL } from "../config/config";
+import { SearchContext } from "../pages/_app";
 
 const Header = ({
   isOpen,
@@ -16,6 +17,7 @@ const Header = ({
 }) => {
   const { data: session } = useSession();
   const [isModalOpen, setModalOpen] = useState(false);
+  const { search, setSearch } = useContext(SearchContext);
 
   useEffect(() => {
     if (session?.user?.name) {
@@ -42,8 +44,14 @@ const Header = ({
           />
           <h3 className="pl-5 text-2xl text-white">NextTube</h3>
         </div>
-        <div className="flex items-center w-1/2">
-          <input className="p-2 w-full" placeholder="Search" type="text" />
+        <div className="md:flex items-center hidden w-1/2">
+          <input
+            className="p-2 w-full"
+            placeholder="Search"
+            type="text"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+          />
           <div className="p-2 bg-slate-200">
             <SearchIcon sx={{ color: "white" }} />
           </div>
@@ -63,17 +71,15 @@ const Header = ({
             />
           </div>
         ) : (
-          <div className="w-1/6">
-            <button
-              onClick={() =>
-                signIn("google", { callbackUrl: "http://localhost:3000/" })
-              }
-              className="flex flex-row border text-white border-white p-2 uppercase gap-3 rounded"
-            >
-              <AccountCircleOutlinedIcon />
-              sign in
-            </button>
-          </div>
+          <button
+            onClick={() =>
+              signIn("google", { callbackUrl: "http://localhost:3000/" })
+            }
+            className="flex flex-row border text-white border-white p-2  gap-3 rounded"
+          >
+            <AccountCircleOutlinedIcon />
+            Sign in
+          </button>
         )}
       </div>
     </>
